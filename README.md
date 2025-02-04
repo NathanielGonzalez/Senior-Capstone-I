@@ -6,7 +6,7 @@ the classroom. It eliminates the manual attendance process, reduces time wasted,
 eliminates the possibility of human error.
 
 # Technology Used:
-- Hardware: Raspberry Pi, Camera
+- Hardware: Raspberry Pi Camera
 - Facial Recognition: OpenCV
 - Back-end: Database to store student images and attendance records
 - Front-end: Web interface for teachers to track attendance and provide manual input
