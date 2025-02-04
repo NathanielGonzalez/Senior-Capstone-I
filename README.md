@@ -1,4 +1,4 @@
-# Senior-Capstone-I
+# Senior-Capstone-I - Attendify
 
 # Project Description:
 This project aims to automate classroom attendance by recognizing student faces as they enter
