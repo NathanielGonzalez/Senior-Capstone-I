@@ -18,7 +18,7 @@ eliminates the possibility of human error.
 
 # Team Members:
 - Sara
-- Nathaniel Jacob Gonzalez
+- Nathaniel
 - Nicole
 - Devin
 - Liz
