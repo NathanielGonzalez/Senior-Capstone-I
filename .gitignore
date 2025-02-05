@@ -1,0 +1,34 @@
+#thanks chatgpt
+# 🌱 General Ignore Rules
+.env
+*.log
+*.tmp
+
+# 🔥 Python Ignored Files
+__pycache__/
+*.pyc
+*.pyo
+venv/
+*/venv/  # Covers virtual environments in subfolders
+*.sqlite3
+
+# 🚀 Node.js Ignored Files
+node_modules/  # Ignore dependencies
+/api/node_modules
+npm-debug.log* # Ignore npm debug logs
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json # (Optional) Ignore lock file if using Yarn/PNPM
+
+# 📂 Ignore Build and Cache Files
+dist/
+build/
+.out/
+.DS_Store  # macOS system file
+Thumbs.db  # Windows system file
+
+# 🛠️ IDE and Editor Files
+.vscode/
+.idea/
+*.swp
