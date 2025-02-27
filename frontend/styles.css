@@ -1,0 +1,373 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #B1B695, #A690A4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ---------------------------------------------------- Login/Sign Up Page Styling ---------------------------------------------- */
+#authPage {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 2rem;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#formTitle {
+    font-size: 24px;
+    color: #5E4B56;
+    margin-bottom: 15px;
+}
+
+#authForm input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    margin-top: 5px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #5E4B56;
+    font-size: 16px;
+    outline: none;
+}
+
+#authForm input::placeholder {
+    color: #5E4B56;
+}
+
+#authButton {
+    width: 50%;
+    padding: 12px;
+    background: #FCD0A1;
+    border: none;
+    border-radius: 6px;
+    color: #5E4B56;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    transition: background 0.3s ease;
+}
+
+#authButton:hover {
+    background: #AFD2E9;
+}
+
+#toggleText {
+    color: #5E4B56;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* ---------------------------------------------------- Upload Page Styling ---------------------------------------------- */
+#uploadPage {
+    display: none; /* Hidden by default */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 2rem;
+    width: 400px;
+    text-align: center;
+}
+
+#uploadPage h2 {
+    font-size: 24px;
+    color: #5E4B56;
+    margin-bottom: 15px;
+}
+
+#uploadPage input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #5E4B56;
+    font-size: 16px;
+    outline: none;
+}
+
+#uploadPage input::placeholder {
+    color: #5E4B56;
+}
+
+label {
+    display: block;
+    color: #5E4B56;
+    font-weight: bold;
+    margin: 10px 0;
+    font-size: 13px;
+}
+
+#fileUploadContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.fileUploadRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1px;
+    gap: 10px;
+}
+
+.fileInput {
+    flex-grow: 1;
+    padding: 6px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #5E4B56;
+    font-size: 14px;
+}
+
+.deleteFile {
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 12px; 
+    font-weight: bold;
+    cursor: pointer;
+    padding: 3px 6px;
+    width: 24px; 
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+button {
+    width: 90%;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.deleteFile:hover {
+    background: #000000;
+}
+
+#addFile {
+    background: #D8A48F;
+    color: #5E4B56;
+}
+
+#addFile:hover {
+    background: #AFD2E9;
+}
+
+#uploadButton {
+    background: #FCD0A1;
+    color: #5E4B56;
+}
+
+#uploadButton:hover {
+    background: #AFD2E9;
+}
+
+#goToLogin {
+    background: #A690A4;
+    color: #5E4B56;
+}
+
+#goToLogin:hover {
+    background: #AFD2E9;
+}
+
+/* ---------------------------------------------------- Attendance Page Styling ---------------------------------------------- */
+#attendancePage {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    width: 400px;
+    flex-direction: column;
+    align-items: center;
+}
+
+#attendancePage h2 {
+    font-size: 24px;
+    color: #5E4B56;
+    margin-bottom: 25px;
+}
+
+/* Makes Teacher/Class Side by Side */
+#dropdownContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.dropdown-wrapper {
+    width: 50%;
+}
+
+.dropdown-wrapper label {
+    font-size: 16px;
+    color: #5E4B56;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.dropdown-wrapper select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    color: #5E4B56;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+}
+
+
+#attendancePage select {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    color: #5E4B56;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Makes Auto/Manual Buttons Side By Side */
+.attendance-buttons {
+    display: flex;
+    justify-content: center; 
+    gap: 10px;
+    width: 100%;
+}
+
+#autoAttendance, #manualAttendance {
+    width: 45%; 
+    padding: 6px 12px; 
+    font-size: 13px;
+    border-radius: 4px; 
+    text-align: center;
+    font-weight: 600; 
+}
+
+#autoAttendance {
+    background: #FCD0A1;
+    color: #5E4B56;
+    border: none;
+    cursor: pointer;
+}
+
+#autoAttendance:hover {
+    background: #AFD2E9;
+}
+
+#manualAttendance {
+    background: #A690A4;
+    color: #5E4B56;
+    border: none;
+    cursor: pointer;
+}
+
+#manualAttendance:hover {
+    background: #AFD2E9;
+}
+
+#attendanceStatus {
+    margin: 15px 0;
+    font-size: 14px;
+    color: #5E4B56;
+} 
+
+
+#attendanceTable {
+    width: 95%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    overflow: hidden;
+    display: none; /* Hide until class is selected */
+    table-layout: fixed;
+}
+
+#attendanceTable th, #attendanceTable td {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    text-align: center;
+    color: #5E4B56;
+    width: 33.33%; /* all 3 columns take equal space */
+}
+
+#attendanceTable th {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+#exportResults {
+    background: #5E4B56;
+    color: white;
+}
+
+#exportResults:hover {
+    background: #AFD2E9;
+}
+
+#backToUpload {
+    background: transparent;
+    color: #5E4B56;
+    text-decoration: underline;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#backToUpload:hover {
+    color: #AFD2E9;
+}
+
+.null {
+    background-color: grey;
+    color: white;
+}
+
+.present {
+    background-color: green;
+    color: white;
+}
+
+.absent {
+    background-color: rgb(255, 7, 7);
+    color: white;
+}
+
+#attendancePage { 
+    display: none; /* Hide attendance page initially */
+}
