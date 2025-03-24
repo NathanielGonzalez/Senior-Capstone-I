@@ -1,0 +1,16 @@
+{
+    "professors": [
+      { "id": 1, "name": "Dr. Smith", "pin": "1234" },
+      { "id": 2, "name": "Dr. Johnson", "pin": "5678" }
+    ],
+    "courses": [
+      { "id": 1, "name": "Computer Vision", "professor_id": 1 },
+      { "id": 2, "name": "Machine Learning", "professor_id": 2 }
+    ],
+    "students": [
+      { "id": 1, "name": "Alice", "course_id": 1, "image": "1.jpg" },
+      { "id": 2, "name": "Bob", "course_id": 1, "image": "2.jpg" },
+      { "id": 3, "name": "Charlie", "course_id": 2, "image": "3.jpg" }
+    ]
+  }
+  

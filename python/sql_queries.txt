@@ -1,0 +1,31 @@
+ Paste the below into the local attendify db's query console. itll make the tables.
+ Once you do that, run populatedb.py 
+ It will put all of the data defined in sampledata.json into your attendify db
+ You can change the contents of student_pics and sampledata.json to be whatever you want in your db
+ 
+ CREATE TABLE professors (
+     id SERIAL PRIMARY KEY,
+     name VARCHAR(255) NOT NULL,
+     pin VARCHAR(10) NOT NULL
+ );
+
+ CREATE TABLE courses (
+     id SERIAL PRIMARY KEY,
+     name VARCHAR(255) NOT NULL,
+     professor_id INT REFERENCES professors(id) ON DELETE CASCADE
+ );
+
+ CREATE TABLE students (
+     id SERIAL PRIMARY KEY,
+     name VARCHAR(255) NOT NULL,
+     face_encoding JSON,   Added face_encoding column directly
+     course_id INT REFERENCES courses(id) ON DELETE CASCADE
+ );
+
+ CREATE TABLE attendance (
+     id SERIAL PRIMARY KEY,
+     student_id INT REFERENCES students(id) ON DELETE CASCADE,
+     course_id INT REFERENCES courses(id) ON DELETE CASCADE,
+     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     status VARCHAR(20) CHECK (status IN ('Present', 'Absent'))
+ );
