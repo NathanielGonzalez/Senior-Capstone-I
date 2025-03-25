@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendify</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sign up & login pages -->
+    <div id="authPage">
+        <h2 id="formTitle">Sign Up</h2>
+        <form id="authForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit" id="authButton">Sign Up</button>
+        </form>
+        <p id="toggleText"></p>
+    </div>
+
+    <!-- Upload page (after sign-up) -->
+    <div id="uploadPage">
+        <h2>Upload Class Data</h2>
+        <input type="text" id="teacherName" placeholder="Enter your first & last name" required>
+        
+        <label>Upload a file for each class you have:</label>
+        <div id="fileUploadContainer"></div>
+    
+        <button id="addFile">Add File</button>
+
+        <button id="uploadButton">Upload Files</button>
+        <button id="goToLogin">Go to Login</button>
+    </div>
+
+    <!-- Attendance page (after login) -->
+    <div id="attendancePage">
+        <h2>Take Attendance</h2>
+    
+        <!-- Teacher and class dropdowns -->
+        <div id="dropdownContainer">
+            <div class="dropdown-wrapper">
+                <label for="teacherDropdown">Select Teacher:</label>
+                <select id="teacherDropdown">
+                    <option value="" disabled selected>Select a teacher</option>
+                </select>
+            </div>
+            <div class="dropdown-wrapper">
+                <label for="classDropdown">Select Class:</label>
+                <select id="classDropdown" disabled>
+                    <option value="" disabled selected>Select a class</option>
+                </select>
+            </div>
+        </div>
+    
+        <!-- Attendance taking buttons -->
+        <div class="attendance-buttons">
+            <button id="autoAttendance" disabled>Start Auto Attendance</button>
+            <button id="manualAttendance" disabled>Start Manual Attendance</button>
+        </div>
+    
+        <p id="attendanceStatus">Attendance Status: Not Started</p>
+    
+        <!-- Attendance table (initially hidden) -->
+        <table id="attendanceTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Student ID</th>
+                    <th>Present?</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceBody"></tbody>
+        </table>
+
+        <!-- Other buttons -->
+        <button id="exportResults" disabled>Export Results</button>
+        <button id="backToUpload">Back to Upload Page</button>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
