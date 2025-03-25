@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name": "Attendify",
+    "version": "1.0",
+    "description": "Facial recognition-based attendance tracking",
+    "permissions": ["storage"],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+      }
+    }
+}
