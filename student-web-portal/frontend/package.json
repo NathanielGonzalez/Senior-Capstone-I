@@ -13,7 +13,6 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@headlessui/react": "^1.7.18",
-    "@heroui/react": "^2.7.5",
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
     "@supabase/supabase-js": "^2.49.1",

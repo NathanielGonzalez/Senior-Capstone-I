@@ -2,16 +2,16 @@ import React from 'react';
 import { Menu, MenuItem, IconButton, Avatar, Badge } from '@mui/material';
 import { Notifications, Mail } from '@mui/icons-material';
 
-// Components
-import ViewProfileModal from '../Modals/ViewProfileModal';
+interface TopBarProps {
+  onOpenProfile: () => void;
+}
 
-const TopBar: React.FC = () => {
+const TopBar: React.FC<TopBarProps> = ({ onOpenProfile }) => {
   // State fpr the dropdown menu
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   // State for the profile modal
-  const [showProfileModal, setShowProfileModal] = React.useState(false);
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -62,9 +62,10 @@ const TopBar: React.FC = () => {
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-          <MenuItem 
+          <MenuItem
             onClick={() => {
-              setShowProfileModal(true);
+              handleClose();
+              setTimeout(() => onOpenProfile(), 100); // avoid MUI focus conflict
             }}
           >
             View Profile
