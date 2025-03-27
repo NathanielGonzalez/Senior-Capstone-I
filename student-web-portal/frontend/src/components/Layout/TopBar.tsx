@@ -20,6 +20,14 @@ const TopBar: React.FC<TopBarProps> = ({ onOpenProfile }) => {
   const handleClose = () => {
     setAnchorEl(null);
   }
+  const handleLogout = () => {
+    setAnchorEl(null);
+      // Remove auth_token from localStorage
+  localStorage.removeItem('auth_token');
+
+  // Redirect to the base page (assuming base page is "/")
+  window.location.href = '/'; // Or use navigate() if you're using React Router
+  }
 
   return (
     <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
@@ -71,7 +79,7 @@ const TopBar: React.FC<TopBarProps> = ({ onOpenProfile }) => {
             View Profile
           </MenuItem>
           <MenuItem onClick={handleClose}>Edit Profile</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </div>
     </div>

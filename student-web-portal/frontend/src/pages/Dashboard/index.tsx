@@ -1,5 +1,7 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
+import axios from 'axios';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,6 +16,7 @@ import {
 } from 'chart.js';
 import { Card, CardContent, Typography, IconButton, Box, CircularProgress, Divider } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
+
 
 ChartJS.register(
   CategoryScale,
@@ -63,12 +66,30 @@ const performanceData = {
 
 
 const Dashboard: React.FC = () => {
+const [userInfo, setUserInfo] = useState({})
+const [userCourses, setUserCourses] = useState([])
+useEffect(()=>{
+  const checkUser = async () => {
+    const tok = localStorage.getItem('auth_token');
+    const user = await axios.post('https://capstoneserver-puce.vercel.app/studentInfo', {
+        user:tok
+      },
+      { headers: { 'Authorization': `Bearer ${tok}` } }
+    )
+      setUserInfo(user.data.userInfo);
+      setUserCourses(user.data.courses);
+  };
+  checkUser();
+},[])
+useEffect(()=>{
+  console.log(userInfo)
+},[userInfo])
 
   return (
     <Box sx={{ paddingX: 4, pt: 4, backgroundColor: '#f8faff', minHeight: '100vh' }}>
       {/* Header Section */}
       <Typography variant="h5" fontWeight="bold" gutterBottom>
-        Welcome back, name here.
+        Welcome back, {userInfo.name}.
       </Typography>
 
       <Box display="grid" gridTemplateColumns={{ xs: "1fr", md: "2fr 1fr" }} gap={2}>
@@ -83,7 +104,7 @@ const Dashboard: React.FC = () => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">Total Courses</dt>
-                    <dd className="text-3xl font-semibold text-gray-900">6</dd>
+                    <dd className="text-3xl font-semibold text-gray-900">{userCourses.length}</dd>
                   </dl>
                 </div>
               </div>

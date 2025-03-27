@@ -14,8 +14,7 @@ import {
   Chip,
   Grid,
 } from '@mui/material';
-import supabase from '../../utils/supabaseClient';
-
+import axios from 'axios'
 interface Props {
     isOpen: boolean;
     onClose: () => void;
@@ -26,24 +25,19 @@ const ViewProfileModal: React.FC<Props> = ({ isOpen, onClose }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      const fetchUser = async () => {
-        setLoading(true);
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-  
-        const { data, error } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', user.id)
-          .single();
-  
-        if (!error) {
-          setUserInfo({ ...data, email: user.email, created_at: user.created_at });
-        }
-        setLoading(false);
+      const checkUser = async () => {
+        const tok = localStorage.getItem('auth_token');
+        const user = await axios.post('https://capstoneserver-puce.vercel.app/studentInfo', {
+            user:tok
+          },
+          { headers: { 'Authorization': `Bearer ${tok}` } }
+        )
+          setUserInfo(user.data.userInfo);
+          setLoading(false)
       };
+      
   
-      if (isOpen) fetchUser();
+      if (isOpen) checkUser();;
     }, [isOpen]);
 
     return (
@@ -59,13 +53,13 @@ const ViewProfileModal: React.FC<Props> = ({ isOpen, onClose }) => {
               <Box display="flex" alignItems="center" gap={2}>
                 <Avatar
                   src={userInfo?.avatar_url || ''}
-                  alt={userInfo?.full_name || 'User'}
+                  alt={userInfo?.name || 'User'}
                   sx={{ width: 64, height: 64 }}
                 />
                 <Box>
-                  <Typography variant="h6">{userInfo.full_name || 'Full Name'}</Typography>
+                  <Typography variant="h6">{userInfo.name || 'Full Name'}</Typography>
                   <Typography variant="body2" color="gray">{userInfo.email}</Typography>
-                  <Chip label={userInfo?.phone} color="info" size="small" sx={{ mt: 1 }} />
+                  <Chip label={userInfo?.number} color="info" size="small" sx={{ mt: 1 }} />
                 </Box>
               </Box>
 
