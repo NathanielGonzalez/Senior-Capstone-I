@@ -35,7 +35,7 @@ const Signup: React.FC = () => {
     try {
       // 1. Create user in Supabase Auth
 
-      const response = await axios.post(`https://capstoneserver-puce.vercel.app/student/signup`, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/student/signup`, {
         password:formData.password,
         studentId: formData.studentId,
         email: formData.email,
@@ -54,7 +54,7 @@ const Signup: React.FC = () => {
 
       // Automatically sign in the user after successful signup
      
-      const loginresponse = await axios.post('https://capstoneserver-puce.vercel.app/student/login', {
+      const loginresponse = await axios.post(`${import.meta.env.VITE_API_URL}/student/login`, {
         email: formData.email,
         password: formData.password,
       }); 

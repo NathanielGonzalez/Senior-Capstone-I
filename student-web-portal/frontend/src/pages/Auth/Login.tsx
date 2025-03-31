@@ -22,7 +22,7 @@ const Login: React.FC = () => {
       if (session) {
         navigate("/dashboard", { replace: true });
       }
-    };
+    }; 
     checkUser();
   }, [navigate]);
 
@@ -30,11 +30,11 @@ const Login: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+//cant have hashtag
     try {
-      const response = await axios.post('https://capstoneserver-puce.vercel.app/student/login', {
-        email,
-        password,
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/student/login`, {
+        email:email,
+        password:password,
       });
 
       if (response.data.success) {
