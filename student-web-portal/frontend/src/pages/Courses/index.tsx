@@ -11,7 +11,7 @@ const Courses: React.FC = () => {
   useEffect(()=>{
     const checkUser = async () => {
       const tok = localStorage.getItem('auth_token');
-      const user = await axios.post('https://capstoneserver-puce.vercel.app/studentInfo', {
+      const user = await axios.post(`${import.meta.env.VITE_API_URL}/studentInfo`, {
           user:tok
         },
         { headers: { 'Authorization': `Bearer ${tok}` } }
@@ -30,7 +30,7 @@ const Courses: React.FC = () => {
       
       {/* Header Section */}
       <Typography variant="h5" fontWeight="bold" gutterBottom>
-        Welcome Back, {userInfo.name}
+        Welcome Back, {userInfo.name} 
       </Typography>
       <Typography variant="body2" color="gray">
         Here’s an overview of your course

@@ -71,7 +71,7 @@ const [userCourses, setUserCourses] = useState([])
 useEffect(()=>{
   const checkUser = async () => {
     const tok = localStorage.getItem('auth_token');
-    const user = await axios.post('https://capstoneserver-puce.vercel.app/studentInfo', {
+    const user = await axios.post(`${import.meta.env.VITE_API_URL}/studentInfo`, {
         user:tok
       },
       { headers: { 'Authorization': `Bearer ${tok}` } }
