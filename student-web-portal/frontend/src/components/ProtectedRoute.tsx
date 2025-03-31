@@ -1,12 +1,11 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import supabase from '../utils/supabaseClient';
 
 const ProtectedRoute: React.FC = () => {
-    const user = supabase.auth.getUser();
+    const token = localStorage.getItem("auth_token");
 
     // If no user is found, redirect to login
-    if (!user) {
+    if (!token) {
         return <Navigate to="/login" replace />;
     }
 
