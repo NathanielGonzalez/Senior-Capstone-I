@@ -36,17 +36,11 @@
     <div id="attendancePage">
         <h2>Take Attendance</h2>
     
-        <!-- Teacher and class dropdowns -->
+        <!-- Class dropdown -->
         <div id="dropdownContainer">
             <div class="dropdown-wrapper">
-                <label for="teacherDropdown">Select Teacher:</label>
-                <select id="teacherDropdown">
-                    <option value="" disabled selected>Select a teacher</option>
-                </select>
-            </div>
-            <div class="dropdown-wrapper">
                 <label for="classDropdown">Select Class:</label>
-                <select id="classDropdown" disabled>
+                <select id="classDropdown">
                     <option value="" disabled selected>Select a class</option>
                 </select>
             </div>
@@ -74,7 +68,26 @@
 
         <!-- Other buttons -->
         <button id="exportResults" disabled>Export Results</button>
-        <button id="backToUpload">Back to Upload Page</button>
+        <button id="editClassButton">Edit/Delete Classes</button>
+    </div>
+
+    <!-- Edit Classes page (from attendance page) -->
+    <div id="editClassesPage">
+        <h2>Change Class Data</h2>
+
+        <!-- Course List -->
+        <label>Your Courses:</label>
+        <div id="previousCoursesContainer"></div>
+
+        <!-- Add Course Abilites -->
+        <div id="courseUploadContainer"></div>
+        <button id="addCourse">Add Course</button>
+
+        <!-- Upload Courses -->
+        <button id="uploadCourseButton">Upload Courses</button>
+
+        <!-- Back Button -->
+        <button id="backToAttendance">Back to Login</button>
     </div>
     
     <script src="popup.js"></script>

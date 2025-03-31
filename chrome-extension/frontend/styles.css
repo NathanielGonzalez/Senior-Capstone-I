@@ -20,7 +20,7 @@ body {
     padding: 2rem;
     width: 350px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px #5E4B56(0, 0, 0, 0.2);
 }
 
 #formTitle {
@@ -217,27 +217,29 @@ button {
     margin-bottom: 25px;
 }
 
-/* Makes Teacher/Class Side by Side */
 #dropdownContainer {
     display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 5px;
+    align-items: center; /* Align the dropdown and label horizontally */
+    margin-bottom: 20px; /* Add some space below */
 }
 
 .dropdown-wrapper {
-    width: 50%;
+    display: flex;
+    flex-direction: row; 
+    align-items:first baseline; 
+    gap: 10px; /* Space between label and dropdown */
+    width: 100%;
 }
 
 .dropdown-wrapper label {
     font-size: 16px;
     color: #5E4B56;
-    display: block;
-    margin-bottom: 5px;
+    display: inline;
+    margin-bottom: 0; 
+    white-space: nowrap; 
 }
 
 .dropdown-wrapper select {
-    width: 100%;
     padding: 10px;
     border-radius: 6px;
     border: none;
@@ -246,8 +248,9 @@ button {
     font-size: 14px;
     outline: none;
     cursor: pointer;
+    width: 90%; 
+    white-space: nowrap;
 }
-
 
 #attendancePage select {
     width: 90%;
@@ -370,4 +373,130 @@ button {
 
 #attendancePage { 
     display: none; /* Hide attendance page initially */
+}
+
+/* ---------------------------------------------------- Edit Classes Page Styling ---------------------------------------------- */
+#editClassesPage {
+    display: none; /* Hidden by default */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 2rem;
+    width: 400px;
+    text-align: center;
+}
+
+#editClassesPage h2 {
+    font-size: 24px;
+    color: #5E4B56;
+    margin-bottom: 15px;
+}
+
+#editClassButton {
+    background: #B1B695;
+    color: #5E4B56;
+}
+
+#editClassButton:hover {
+    background: #AFD2E9
+}
+
+#addCourse, #uploadCourseButton, #backToAttendance {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#addCourse {
+    background: #FCD0A1;
+    color: #5E4B56;
+}
+
+#addCourse:hover {
+    background:#AFD2E9 
+}
+
+#uploadCourseButton {
+    background: #A690A4;
+    color: #5E4B56;
+}
+
+#uploadCourseButton:hover {
+    background:#AFD2E9 
+}
+
+#backToAttendance {
+    background: #B1B695;
+    color: #5E4B56;
+}
+
+#backToAttendance:hover {
+    background: #AFD2E9;
+}
+
+#previousCoursesContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.courseEntry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 6px;
+}
+
+#courseUploadContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.courseWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1px;
+    gap: 10px;
+}
+
+.courseFileInput {
+    flex-grow: 1;
+    padding: 6px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #5E4B56;
+    font-size: 14px;
+    max-width: 42%;
+}
+
+.deleteCourse {
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 12px; 
+    font-weight: bold;
+    cursor: pointer;
+    padding: 3px 6px;
+    width: 24px; 
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.deleteCourse:hover {
+    background: #000000;
 }
