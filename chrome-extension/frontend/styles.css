@@ -220,7 +220,7 @@ button {
 #dropdownContainer {
     display: flex;
     align-items: center; /* Align the dropdown and label horizontally */
-    margin-bottom: 20px; /* Add some space below */
+    margin-bottom: 6px; /* Add some space below */
 }
 
 .dropdown-wrapper {
@@ -310,9 +310,8 @@ button {
     color: #5E4B56;
 } 
 
-
 #attendanceTable {
-    width: 95%;
+    width: 99%;
     margin-top: 10px;
     margin-bottom: 10px;
     border-collapse: collapse;
@@ -359,16 +358,19 @@ button {
 .null {
     background-color: grey;
     color: white;
+    font-size: 14px;
 }
 
 .present {
     background-color: green;
     color: white;
+    font-size: 14px;
 }
 
 .absent {
     background-color: rgb(255, 7, 7);
     color: white;
+    font-size: 14px;
 }
 
 #attendancePage { 
@@ -466,7 +468,7 @@ button {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 1px;
+    margin-bottom: 8px;
     gap: 10px;
 }
 
@@ -478,7 +480,6 @@ button {
     background: rgba(255, 255, 255, 0.2);
     color: #5E4B56;
     font-size: 14px;
-    max-width: 42%;
 }
 
 .deleteCourse {

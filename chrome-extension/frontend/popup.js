@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (isSignup) {
             // Send a POST request (to store sign up info) to backend
-            fetch('https://capstoneserver-puce.vercel.app/signup', {
+            fetch('https://capstoneserver-ndh5.onrender.com/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } 
         else {
             // Send a POST request to backend to log in the user
-            fetch('https://capstoneserver-puce.vercel.app/login', {
+            fetch('https://capstoneserver-ndh5.onrender.com/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -94,8 +94,10 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 if (data.success) {
                     localStorage.setItem('professor_id', data.professor_id);
+                    const currentProfessorId = data.professor_id;
+                    getAndDisplayCourses(currentProfessorId);
+                    loadCourses(currentProfessorId);
                     alert("Login successful!");
-                    getAndDisplayCourses(professorId);
                     authPage.style.display = "none";
                     uploadPage.style.display = "none";
                     attendancePage.style.display = "block";
@@ -123,11 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const newFileInput = document.createElement("input");
         newFileInput.type = "file";
         newFileInput.className = "fileInput";
-
-        const courseNameInput = document.createElement("input");
-        courseNameInput.type = "text";
-        courseNameInput.className = "courseNameInput";
-        courseNameInput.placeholder = "Course name?";
         
         const deleteButton = document.createElement("button");
         deleteButton.className = "deleteFile";
@@ -137,7 +134,6 @@ document.addEventListener("DOMContentLoaded", function () {
             fileWrapper.remove();
         });
 
-        fileWrapper.appendChild(courseNameInput);
         fileWrapper.appendChild(newFileInput);
         fileWrapper.appendChild(deleteButton);
 
@@ -159,39 +155,36 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const fileInputs = document.querySelectorAll(".fileInput");
-        const courseNameInputs = document.querySelectorAll(".courseNameInput");
 
         let hasFiles = false;
 
         for (let i = 0; i < fileInputs.length; i++) {
             const input = fileInputs[i];
-            const courseName = courseNameInputs[i].value.trim();
     
-            if (input.files.length > 0 && courseName) {
+            if (input.files.length > 0) {
                 const courseCsvFile = input.files[0];
                 hasFiles = true;
 
                 const formData = new FormData();
                 formData.append("professor_id", professorId);
-                formData.append("name", courseName);
                 formData.append("coursecsv", courseCsvFile);
                 
                 // Fetch request to upload each course
-                fetch('https://capstoneserver-puce.vercel.app/addcourse', {
+                fetch('https://capstoneserver-ndh5.onrender.com/addcourse', {
                     method: 'POST',
                     body: formData,
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert(`Course "${courseName}" uploaded successfully!`);
+                        alert(`Course uploaded successfully!`);
                     } else {
-                        alert(`Error adding course "${courseName}": ${data.message}`);
+                        alert(`Error adding course: ${data.message}`);
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert(`Error uploading course "${courseName}". Please try again.`);
+                    alert(`Error uploading course. Please try again.`);
                 });  
             } else {
                 alert("Please provide a course name and select a file for each class.");
@@ -220,6 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
         authPage.style.display = "block";
         isSignup = false;
         updateForm();
+        localStorage.removeItem('professor_id');
     });
 //-----------------------------------------------------ATTENDANCE PAGE------------------------------------------------------------------
     const classDropdown = document.getElementById("classDropdown");
@@ -234,8 +228,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let isManualMode = false;
 
-    const professorId = localStorage.getItem('professor_id');
-
     // Function to clear attendancePage when going back to it
     function clearAttendancePage(){
         attendanceBody.innerHTML = "";
@@ -244,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Shows courses based on logged in professor
     function getAndDisplayCourses(professorId) {
-        fetch(`https://capstoneserver-puce.vercel.app/courses/${professorId}`)
+        fetch(`https://capstoneserver-ndh5.onrender.com/courses/${professorId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -257,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Populate class dropdown with professor courses
                 courses.forEach(course => {
                     let option = document.createElement("option");
-                    option.value = course.id; // Assuming each course has a unique 'id'
+                    option.value = course.id;
                     option.textContent = course.name;
                     classDropdown.appendChild(option);
                 });
@@ -272,7 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Displays students in the course in table
     function getAndDisplayStudents(courseId){
-        fetch(`https://capstoneserver-puce.vercel.app/students/${courseId}`, {})
+        fetch(`https://capstoneserver-ndh5.onrender.com/students/${courseId}`, {})
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -362,9 +354,31 @@ document.addEventListener("DOMContentLoaded", function () {
         // Change status to show attendance has started
         attendanceStatus.textContent = "Attendance Status: Automatic in Progress";
 
-        // ADD LOGIC TO MARK ATTENDANCE -------------------------------------------------
+        const courseId = classDropdown.value;
+        const roomId = 695; // Example value
 
-        // Mark all students as present for now
+        // Request to start attendance
+        fetch("https://capstoneserver-ndh5.onrender.com/startattendence", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ courseId: courseId, roomId: roomId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // If attendance was successfully started, update UI
+            if (data.success) {
+                alert("Attendance Started" + JSON.stringify(data));
+            } else {
+                alert("Error starting attendance: " + (JSON.stringify(data)));
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Failed to start attendance.");
+        });
+
+        /*
+        // Mark all students as present for now (use for logic later)
         document.querySelectorAll("#attendanceBody button").forEach(button => {
             button.classList.remove("null");
             button.classList.remove("absent");
@@ -375,6 +389,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Allow for results to be exported
             exportResults.disabled = false;
         });
+        */
     });
 
     // Event listener for export results button
@@ -386,7 +401,6 @@ document.addEventListener("DOMContentLoaded", function () {
             let studentId = row.children[1].textContent;
             let statusButton = row.children[2].children[0];
     
-            // Determine the status based on the button's class
             let studentStatus = "N/A";
     
             if (statusButton.classList.contains("present")) {
@@ -396,7 +410,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
     
             // Create the fetch promise for each student's data export
-            let promise = fetch('https://capstoneserver-puce.vercel.app/attendance', {
+            let promise = fetch('https://capstoneserver-ndh5.onrender.com', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -440,7 +454,7 @@ document.addEventListener("DOMContentLoaded", function () {
         uploadPage.style.display = "none";
         attendancePage.style.display = "none";
         editClassesPage.style.display = "block";
-        loadCourses();
+        updateForm();
     });
 
 //-------------------------------------------------EDIT CLASS PAGE-------------------------------------------------------------------------------
@@ -450,8 +464,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const courseUploadContainer = document.getElementById("courseUploadContainer");
 
     // Fetch and display professors saved courses
-    function loadCourses() {
-        fetch(`https://capstoneserver-puce.vercel.app/courses/${professorId}`, {})
+    function loadCourses(professorID) {
+        fetch(`https://capstoneserver-ndh5.onrender.com/courses/${professorID}`, {})
             .then(response => response.json())
             .then(data => {
                 courseContainer.innerHTML = ""; // Clear list before populating
@@ -484,7 +498,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Remove a specific course
     function removeCourse(courseID, courseEntry) {
-        fetch("https://capstoneserver-puce.vercel.app/removeCourse", {
+        const professorId = localStorage.getItem('professor_id');
+
+        fetch("https://capstoneserver-ndh5.onrender.com/removeCourse", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
@@ -497,7 +513,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data.success) {
                 alert("Successfully removed course.")
                 courseEntry.remove();
-                loadCourses();
+                loadCourses(professorId);
             } else {
                 alert("Error removing course.");
             }
@@ -513,17 +529,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const newCourseFile = document.createElement("input");
         newCourseFile.type = "file";
         newCourseFile.className = "courseFileInput";
-
-        const courseNameInput = document.createElement("input");
-        courseNameInput.type = "text";
-        courseNameInput.className = "courseNameInput";
-        courseNameInput.placeholder = "Course name?";
         
         const deleteCourseButton = document.createElement("button");
         deleteCourseButton.className = "deleteCourse";
         deleteCourseButton.innerHTML = "❌";
 
-        courseWrapper.appendChild(courseNameInput);
         courseWrapper.appendChild(newCourseFile);
         courseWrapper.appendChild(deleteCourseButton);
 
@@ -540,40 +550,38 @@ document.addEventListener("DOMContentLoaded", function () {
     // Event listener for upload file button
     uploadCourseButton.addEventListener("click", function () {
         const fileInputs = document.querySelectorAll(".courseFileInput");
-        const courseNameInputs = document.querySelectorAll(".courseNameInput");
+        const professorId = localStorage.getItem('professor_id');
 
         let hasFiles = false;
 
         for (let i = 0; i < fileInputs.length; i++) {
             const input = fileInputs[i];
-            const courseName = courseNameInputs[i].value.trim();
     
-            if (input.files.length > 0 && courseName) {
+            if (input.files.length > 0) {
                 const courseCsvFile = input.files[0];
                 hasFiles = true;
 
                 const formData = new FormData();
                 formData.append("professor_id", professorId);
-                formData.append("name", courseName);
                 formData.append("coursecsv", courseCsvFile);
                 
                 // Fetch request per course
-                fetch('https://capstoneserver-puce.vercel.app/addcourse', {
+                fetch('https://capstoneserver-ndh5.onrender.com/addcourse', {
                     method: 'POST',
                     body: formData,
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert(`Course "${courseName}" uploaded successfully!`);
-                        loadCourses();
+                        alert(`Course uploaded successfully!`);
+                        loadCourses(professorId);
                     } else {
-                        alert(`Error adding course "${courseName}": ${data.message}`);
+                        alert(`Error adding course: ${data.message}`);
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert(`Error uploading course "${courseName}". Please try again.`);
+                    alert(`Error uploading course. Please try again.`);
                 });  
             } else {
                 alert("Please provide a course name and select a file for each class.");
@@ -590,6 +598,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Back to Login Page
     backToAttendanceButton.addEventListener("click", function () {
+        localStorage.removeItem('professor_id');
         document.getElementById("editClassesPage").style.display = "none";
         document.getElementById("attendancePage").style.display = "none";
         document.getElementById("authPage").style.display = "block";
