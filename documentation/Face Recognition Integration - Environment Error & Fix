@@ -1,0 +1,32 @@
+Nathaniel Jacob Gonzalez
+April 9th 2025
+
+Problem
+While working on integration-with-backend.py, the app was crashing with the following error when uploading a student photo:
+RuntimeError: Unsupported image type, must be 8bit gray or RGB image.
+
+Even though the code worked perfectly for some team members, others (like me 😅) were repeatedly getting this error. Turns out, the root cause wasn’t the code—it was Python environment inconsistencies.
+
+Root Cause
+Different global Python setups were affecting how dependencies like opencv-python and face_recognition handled image data. Some systems were:
+Missing proper image processing modules (e.g., PIL wasn’t converting images properly)
+Using incompatible global Python versions or paths
+Mixing global and user-level packages (which caused import conflicts)
+
+Solution: Use a Virtual Environment
+To isolate dependencies and make the codebase run consistently across machines, we switched to using a Python virtual environment:
+
+Setup Instructions
+1.  Create a virtual environment
+    python -m venv .venv
+2.  Activate the environment
+    .venv\Scripts\Activate.ps1
+3.  Install all required packages
+    pip install opencv-python face_recognition flask flask-cors numpy requests python-socketio Pillow websocket-client
+4.  Run the script
+    python python/integration-with-backend.py
+
+Result
+The app no longer crashes on image upload
+Flask and Socket.IO now work reliably
+Consistent behavior across all team members’ machines
