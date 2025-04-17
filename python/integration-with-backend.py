@@ -12,7 +12,7 @@ from flask_cors import CORS
 # Replace with your actual backend URL and port (e.g., 'http://192.168.1.100:3000')
 BACKEND_URL = 'https://capstoneserver-ndh5.onrender.com'
 FLASK_PORT = 5001
-ROOM_NUMBER =695
+ROOM_NUMBER =-1
 
 # Global variables to store known face encodings for attendance
 known_face_encodings = []
@@ -99,7 +99,7 @@ def load_known_faces(course_id):
     except requests.exceptions.RequestException as e:
         print("Error fetching known faces:", e)
 
-def process_attendance(course_id):
+def process_attendance(session_id, course_id):
     """
     Captures video from the camera, recognizes faces, and sends attendance records.
     """
@@ -150,12 +150,12 @@ def process_attendance(course_id):
 
                             payload = {
                                 'student_id': student_id,
-                                'course_id': course_id,
+                                'session_id': session_id,
                                 'status': 'Present'
                             }
                             try:
                                 attendance_response = requests.post(f'{BACKEND_URL}/attendance', json=payload)
-                                if attendance_response.status_code == 200:
+                                if attendance_response.status_code == 201:
                                     print(f"Recorded attendance for student {student_id}")
                                 else:
                                     print(f"Failed to record attendance for student {student_id}: {attendance_response.text}")
@@ -189,9 +189,10 @@ def handle_attendance_started(data):
     Expects the data to include 'course_id'.
     """
     course_id = data.get('courseId')
+    session_id = data.get('sessionId')
     print(f"Received attendanceStarted event for course {course_id}")
     if data.get('roomId') == ROOM_NUMBER:
-        process_attendance(course_id)
+        process_attendance(session_id, course_id)
 
 def start_socketio_client():
     """
