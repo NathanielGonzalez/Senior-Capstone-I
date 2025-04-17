@@ -1,15 +1,36 @@
 import React from 'react';
+import {useState, useEffect} from 'react'
+import axios from 'axios'
 import { Card, CardContent, Typography, Avatar, Box, Chip, IconButton } from '@mui/material';
 import { Call, Message, MoreVert } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
 
 const Courses: React.FC = () => {
+  const [userInfo, setUserInfo] = useState({})
+  const [userCourses,setUserCourses] = useState([])
+  useEffect(()=>{
+    const checkUser = async () => {
+      const tok = localStorage.getItem('auth_token');
+      const user = await axios.post(`${import.meta.env.VITE_API_URL}/studentInfo`, {
+          user:tok
+        },
+        { headers: { 'Authorization': `Bearer ${tok}` } }
+      )
+        setUserInfo(user.data.userInfo);
+        setUserCourses(user.data.courses);
+    };
+    checkUser();
+  },[])
+  useEffect(()=>{
+    console.log(userCourses)
+    console.log(userInfo)
+  },[userInfo])
   return (
 <Box sx={{ padding: 3, backgroundColor: '#f8faff', minHeight: '100vh' }}>
       
       {/* Header Section */}
       <Typography variant="h5" fontWeight="bold" gutterBottom>
-        Welcome Back Jack
+        Welcome Back, {userInfo.name} 
       </Typography>
       <Typography variant="body2" color="gray">
         Here’s an overview of your course
@@ -41,13 +62,15 @@ const Courses: React.FC = () => {
             Course Result
           </Typography>
           <Box display="flex" gap={2} alignItems="center">
-            {[
-              { subject: "Literature", status: "Due", value: null },
-              { subject: "Geography", value: 89 },
-              { subject: "History", value: 78 },
-              { subject: "Algebra", value: 91, highlight: true },
-              { subject: "Biology", value: 65 }
-            ].map((course, index) => (
+            {
+            // [
+            //   { subject: "Literature", status: "Due", value: null },
+            //   { subject: "Geography", value: 89 },
+            //   { subject: "History", value: 78 },
+            //   { subject: "Algebra", value: 91, highlight: true },
+            //   { subject: "Biology", value: 65 }
+            // ]
+            userCourses.map((course, index) => (
               <Box key={index} textAlign="center">
                 <Box 
                   sx={{ 
@@ -61,9 +84,9 @@ const Courses: React.FC = () => {
                     color: course.highlight ? "white" : "black",
                     fontWeight: "bold"
                   }}>
-                  {course.value ? `${course.value}%` : course.status}
+                  {course.value ? `${course.value}%` : course.name}
                 </Box>
-                <Typography variant="body2">{course.subject}</Typography>
+                <Typography variant="body2">{course.name}</Typography>
               </Box>
             ))}
           </Box>
@@ -75,12 +98,14 @@ const Courses: React.FC = () => {
             Upcoming Class
           </Typography>
           <Card sx={{ padding: 2 }}>
-            {[
-              { title: "Cloud Computing Essentials", time: "5:30 PM", icon: "📦" },
-              { title: "Mobile App Development Trends", time: "2:08 PM", icon: "✅" },
-              { title: "Mobile App Development Trends", time: "2:08 PM", icon: "✅" },
-              { title: "Mobile App Development Trends", time: "2:08 PM", icon: "✅" },
-            ].map((classItem, index) => (
+            {
+            // [
+            //   { title: "Cloud Computing Essentials", time: "5:30 PM", icon: "📦" },
+            //   { title: "Mobile App Development Trends", time: "2:08 PM", icon: "✅" },
+            //   { title: "Mobile App Development Trends", time: "2:08 PM", icon: "✅" },
+            //   { title: "Mobile App Development Trends", time: "2:08 PM", icon: "✅" },
+            // ]
+            userCourses.map((classItem, index) => (
               <Box key={index} display="flex" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2, padding: 1, borderRadius: 2, backgroundColor: "#f9f9f9" }}>
                 <Box display="flex" alignItems="center" gap={2}>
                   <Typography fontSize={24}>{classItem.icon}</Typography>

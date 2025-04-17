@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import supabase from '../../utils/supabaseClient';
-
+import axios from 'axios'
 // Assets
 import SignupImage from '../../assets/images/signup-placeholder-image.png';
 
@@ -11,6 +11,7 @@ import Header from '../../components/Header';
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
     fullName: '',
+    studentId: '',
     email: '',
     phone: '',
     password: '',
@@ -33,55 +34,33 @@ const Signup: React.FC = () => {
   
     try {
       // 1. Create user in Supabase Auth
-      const { data, error } = await supabase.auth.signUp({
+
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/student/signup`, {
+        password:formData.password,
+        studentId: formData.studentId,
         email: formData.email,
-        password: formData.password,
-      });
+        number: formData.phone
+      })
 
       // Log response for debugging
-      console.log("Supabase Auth Signup Response:", data, error);
-      
-      // Handle Auth Errors
-      if (error) {
-        setError(error.message);
-        setLoading(false);
-        return;
-      }
 
-      const userId = data.user?.id;
+
+      const userId = response.data.user.id;
       if (!userId) {
         setError('User ID is missing.');
         setLoading(false);
         return;
       }
 
-      // 2. Insert user data into the 'users' table
-      const {error : dbError } = await supabase
-        .from("users")
-        .insert([
-          {
-            id: userId, // Ensure ID matches Supabase Auth UID
-            full_name: formData.fullName,
-            phone: formData.phone,
-            email: formData.email,
-          },
-      ]);
-      
-      if (dbError){
-        console.error("Database Insert Error:", dbError.message);
-        setError(dbError.message);
-        setLoading(false);
-        return;
-      }
-
       // Automatically sign in the user after successful signup
-      const { error: loginError } = await supabase.auth.signInWithPassword({
+     
+      const loginresponse = await axios.post(`${import.meta.env.VITE_API_URL}/student/login`, {
         email: formData.email,
         password: formData.password,
-      });
+      }); 
 
-      if (loginError) {
-        console.error("Auto Login Error:", loginError.message);
+      if (loginresponse.data.success == false) {
+        console.error("Auto Login Error:", loginresponse.data.message);
         setError("Account created, but login failed. Please sign in manually.");
         setLoading(false);
         return;
@@ -136,6 +115,20 @@ const Signup: React.FC = () => {
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-2xl"
                   value={formData.fullName}
+                  onChange={handleChange}
+                />
+              </div>
+
+
+              {/* Student ID */}
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-medium text-gray-700">Student ID</label>
+                <input
+                  type="text"
+                  name="studentId"
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-2xl"
+                  value={formData.studentId}
                   onChange={handleChange}
                 />
               </div>

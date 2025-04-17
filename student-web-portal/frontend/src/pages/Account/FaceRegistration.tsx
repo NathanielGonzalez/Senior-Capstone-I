@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import WebCam from 'react-webcam';
+import axios from 'axios';
 import { 
     Button, Typography, Box, CircularProgress, 
     IconButton, LinearProgress, Card, CardContent 
@@ -15,7 +16,21 @@ const FaceRegistration: React.FC = () => {
     const [capturedImages, setCapturedImages] = useState<string[]>([]);
     const [uploading, setUploading] = useState(false);
     const navigate = useNavigate();
-  
+    const [userInfo, setUserInfo] = useState({})
+  const [userCourses,setUserCourses] = useState([])
+  useEffect(()=>{
+    const checkUser = async () => {
+      const tok = localStorage.getItem('auth_token');
+      const user = await axios.post(`${import.meta.env.VITE_API_URL}/studentInfo`, {
+          user:tok
+        },
+        { headers: { 'Authorization': `Bearer ${tok}` } }
+      )
+        setUserInfo(user.data.userInfo);
+        setUserCourses(user.data.courses);
+    };
+    checkUser();
+  },[])
     // Capture Image from Webcam
     const capture = () => {
         if (webcamRef.current) {
@@ -32,66 +47,51 @@ const FaceRegistration: React.FC = () => {
     };
 
     // Upload Image to Supabase Storage
-    const handleUpload = async () => {
-        if (capturedImages.length === 0) return;
-        setUploading(true);
+const handleUpload = async () => {
+    if (capturedImages.length === 0) return;
+    setUploading(true);
+
+    try {
+        // Retrieve the user from your authentication context or state
+        const user = userInfo;
+        if (!user) throw new Error("User not found or authentication error.");
+
+        const studentId = userInfo.id; // Assuming the user ID corresponds to the student ID
+ 
+        // Create a FormData object
+        const formData = new FormData();
+        formData.append('student_id', studentId);
+
+        // Append each captured image to the FormData object
+        for (let i = 0; i < capturedImages.length; i++) {
+            const imageBlob = await fetch(capturedImages[i]).then(res => res.blob());
+            formData.append('photo', imageBlob, `image_${i}.png`);
+        } 
         
-        try {
-            const { data: { user }, error: authError } = await supabase.auth.getUser();
-            if (authError || !user) throw new Error("User not found or authentication error.");
-
-            const uploadedPaths: string[] = []; // Store uploaded paths
-
-            // Upload Captured Images
-            for (let i = 0; i < capturedImages.length; i++) {
-                const filePath = `faces/${user.id}/${Date.now()}_${i}.png`;
-                const imageBlob = await fetch(capturedImages[i]).then(res => res.blob());
-
-                const { error: uploadError } = await supabase.storage
-                    .from("face-recognition")
-                    .upload(filePath, imageBlob, { upsert: true, contentType: "image/png"}); 
-
-                if (uploadError) {
-                    console.error("Image Upload Error:", uploadError);
-                    throw uploadError;
-                } 
-
-                uploadedPaths.push(filePath); // Store the path of the uploaded image
+        // Send the POST request to the Flask backend
+        const response = await axios.post('http://127.0.0.1:5001/uploadStudentPhoto', formData, {
+            
+            headers: {
+                'Content-Type': 'multipart/form-data'
             }
+            // Include credentials/headers as necessary for authentication
+        });
 
-            // Save the file paths in database
-            const { error: updateError  } = await supabase
-                .from("users")
-                .update({ face_model: uploadedPaths})
-                .eq("id", user.id); // 
-
-            if (updateError) {
-                console.error("Error updating user record with file paths:", updateError.message);
-                throw updateError;
-            }
-
-            // Insert each image as a separate record into face_images table
-            const faceImageRecords = uploadedPaths.map(path => ({
-                user_id: user.id,
-                image_path: path,
-            }));
-
-            const { error: insertError } = await supabase
-                .from("face_images")
-                .insert(faceImageRecords);
-
-            if (insertError) throw insertError;
-
-            alert("Images uploaded successfully and linked to your profile successfully.");
+        
+        if (response.status==200) {
+            alert("Images uploaded and processed successfully.");
             navigate("/dashboard"); // Redirect to dashboard after completion
-        } catch (error: any) {
-            console.error("Upload Error:", error);
-            alert("Fix Error Later - POST PROD.");
-            navigate("/dashboard");
-        } finally {
-            setUploading(false);
+        } else {
+            throw new Error(response.status);
         }
-    };
+    } catch (error) {
+        console.error("Upload Error:", error);
+        alert("An error occurred during the upload. Please try again.");
+        navigate("/dashboard");
+    } finally {
+        setUploading(false);
+    }
+};
 
     return (
         <Box sx={{ paddingY: 0, backgroundColor: "#f8faff", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center" }}> 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link , useNavigate} from 'react-router-dom';
-import supabase from '../../utils/supabaseClient';
-
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // Assets
 import GoogleIcon from '../../assets/icons/google.svg';
@@ -19,11 +18,11 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (data?.user) {
+      const session = localStorage.getItem('auth_token');
+      if (session) {
         navigate("/dashboard", { replace: true });
       }
-    };
+    }; 
     checkUser();
   }, [navigate]);
 
@@ -31,32 +30,19 @@ const Login: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+//cant have hashtag
     try {
-      // 1. Authenticate the user with Supabase Auth
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/student/login`, {
+        email:email,
+        password:password,
       });
 
-      if (error) {
-        setError(error.message);
-        setLoading(false);
-        return;
+      if (response.data.success) {
+        localStorage.setItem('auth_token', response.data.token);
+        navigate('/dashboard', { replace: true });
+      } else {
+        setError(response.data.message || 'Login failed. Please check your credentials.');
       }
-
-      if (!data.session) {
-        setError('Login failed. Please check your credentials.');
-        setLoading(false);
-        return;
-      }
-
-      // 2. Save session (optional)
-      localStorage.setItem('supabase_session', JSON.stringify(data.session));
-
-      // 3. Redirect user to dashboard after successful login
-      navigate('/dashboard', { replace: true });
-
     } catch (err) {
       setError('An unexpected error occurred');
     }
@@ -68,27 +54,25 @@ const Login: React.FC = () => {
     <div>
       <Header />
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 space-y-4">
-        {/* Sign In Form */}
         <div className='max-w-md w-full space-y-6'>
           <h2 className='text-center text-4xl font-bold'>Sign In.</h2>
         </div>
         
-        {/* OAuth Buttons */}
         <div className="space-y-4">
-            <button 
-              type='button'
-              className="w-full flex items-center justify-center py-2 px-32 border border-gray-800 rounded-2xl shadow-sm text-sm font-medium text-gray-800 bg-white hover:bg-gray-50 gap-x-4"
-            >
-              <img src={GoogleIcon} alt="Google" className="h-8 w-8" />
-              Continue with Google
-            </button>
-            <button
-              type="button"
-              className="w-full flex items-center justify-center py-2 px-32 border border-gray-800 rounded-2xl shadow-sm text-sm font-medium text-gray-800 bg-white hover:bg-gray-50 gap-x-4"
-            >
-              <img src={WorkdayIcon} alt="Workday Icon" className="h-8 w-8 mr-2" />
-              Continue with Workday
-            </button>
+          <button 
+            type='button'
+            className="w-full flex items-center justify-center py-2 px-32 border border-gray-800 rounded-2xl shadow-sm text-sm font-medium text-gray-800 bg-white hover:bg-gray-50 gap-x-4"
+          >
+            <img src={GoogleIcon} alt="Google" className="h-8 w-8" />
+            Continue with Google
+          </button>
+          <button
+            type="button"
+            className="w-full flex items-center justify-center py-2 px-32 border border-gray-800 rounded-2xl shadow-sm text-sm font-medium text-gray-800 bg-white hover:bg-gray-50 gap-x-4"
+          >
+            <img src={WorkdayIcon} alt="Workday Icon" className="h-8 w-8 mr-2" />
+            Continue with Workday
+          </button>
         </div>
 
         <div className="text-center text-black font-bold">or</div>
@@ -132,9 +116,9 @@ const Login: React.FC = () => {
         </div>
 
         <div className="text-center text-sm">
-          <span>don't have an account? </span>
+          <span>Don't have an account? </span>
           <Link to="/signup" className="font-base text-black hover:underline">
-            <span className='font-medium'>Create a account</span>
+            <span className='font-medium'>Create an account</span>
           </Link>
         </div>
 
