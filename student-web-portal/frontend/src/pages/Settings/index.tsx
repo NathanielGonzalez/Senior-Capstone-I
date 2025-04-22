@@ -1,8 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Settings: React.FC = () => {
+  const [faceEncoding, setFaceEncoding] = useState<number[] | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try { 
+        const token = localStorage.getItem('auth_token');
+        if (!token) throw new Error("Token not found in localStorage");
+
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/studentInfo`,
+          { user: token },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        const userInfo = response.data.userInfo;
+        console.log('Full user info:', userInfo);
+
+        const encoding = userInfo.face_encoding;
+        console.log('Face Encoding:', encoding);
+
+        setFaceEncoding(encoding); // 2. update state
+      } catch (err) {
+        console.error('Failed to fetch user info:', err);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
+  const handleDownloadFaceModel = () => {
+    if (!faceEncoding) {
+      alert("No face model data found.");
+      return;
+    }
+
+    const blob = new Blob([JSON.stringify(faceEncoding, null, 2)], {
+      type: "application/json",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "face-model.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="space-y-6 p-8">
@@ -30,6 +78,7 @@ const Settings: React.FC = () => {
               Register Face
             </button>
             <button
+              onClick={handleDownloadFaceModel}
               className="px-4 py-2 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200"
             >
               View Current Face Model
