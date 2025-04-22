@@ -277,6 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Populate table with fetched students
                 students.forEach(student => {
                     let row = document.createElement("tr");
+                    row.setAttribute("data-student-id", student.id);
     
                     let nameCell = document.createElement("td");
                     nameCell.textContent = student.name;
@@ -355,7 +356,7 @@ document.addEventListener("DOMContentLoaded", function () {
         attendanceStatus.textContent = "Attendance Status: Automatic in Progress";
 
         const courseId = classDropdown.value;
-        const roomId = 695; // Example value
+        const roomId = 6; // Example value
 
         // Request to start attendance
         fetch("https://capstoneserver-ndh5.onrender.com/startattendence", {
@@ -366,31 +367,64 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
             // If attendance was successfully started, update UI
-            if (data.success) {
-                alert("Attendance Started" + JSON.stringify(data));
+            if (data.id && data.isActive === true) {
+                alert("Attendance Started..." + JSON.stringify(data));
+
+                const sessionId = data.id; 
+                setTimeout(() => {
+                    getSessionAttendance(sessionId);
+                }, 31000);
             } else {
-                alert("Error starting attendance: " + (JSON.stringify(data)));
+                alert("Error starting attendance: " + JSON.stringify(data));
             }
         })
         .catch(error => {
             console.error("Error:", error);
             alert("Failed to start attendance.");
         });
-
-        /*
-        // Mark all students as present for now (use for logic later)
-        document.querySelectorAll("#attendanceBody button").forEach(button => {
-            button.classList.remove("null");
-            button.classList.remove("absent");
-            button.classList.add("present");
-            button.textContent = "Present";
-            button.disabled = true;
-            
-            // Allow for results to be exported
-            exportResults.disabled = false;
-        });
-        */
     });
+
+    function getSessionAttendance(sessionId) {
+        fetch(`https://capstoneserver-ndh5.onrender.com/attendance/${sessionId}`)
+            .then(response => response.json())
+            .then(data => {
+                alert("Attendance data for session:" + JSON.stringify(data));
+
+                // Access the correct array
+                data.attendance.forEach(record => {
+                    const studentId = record.student_id;
+                    const status = record.status;
+
+                    const studentRow = document.querySelector(`#attendanceBody tr[data-student-id="${studentId}"]`);
+                    if (studentRow) {
+                        const statusButton = studentRow.querySelector("button");
+
+                        statusButton.classList.remove("null", "present", "absent");
+                        statusButton.disabled = true;
+
+                        if (status === "Present") {
+                            statusButton.classList.add("present");
+                            statusButton.textContent = "Present";
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching attendance for session:", error);
+            });
+
+        // Find remaining "null" buttons and mark as Absent
+        document.querySelectorAll("#attendanceBody button").forEach(button => {
+            if (button.classList.contains("null")) {
+                button.classList.remove("null");
+                button.classList.add("absent");
+                button.textContent = "Absent";
+                button.disabled = true;
+            }
+        });
+        attendanceStatus.textContent = "Attendance Status: Completed";
+        exportResults.disabled = false;
+    }
 
     // Event listener for export results button
     exportResults.addEventListener("click", function () {

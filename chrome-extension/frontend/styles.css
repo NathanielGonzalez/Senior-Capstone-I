@@ -20,7 +20,7 @@ body {
     padding: 2rem;
     width: 350px;
     text-align: center;
-    box-shadow: 0 4px 10px #5E4B56(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px #8f7283(0, 0, 0, 0.2);
 }
 
 #formTitle {
@@ -362,13 +362,13 @@ button {
 }
 
 .present {
-    background-color: green;
+    background-color: rgb(91, 199, 48);
     color: white;
     font-size: 14px;
 }
 
 .absent {
-    background-color: rgb(255, 7, 7);
+    background-color: rgb(230, 81, 81);
     color: white;
     font-size: 14px;
 }
