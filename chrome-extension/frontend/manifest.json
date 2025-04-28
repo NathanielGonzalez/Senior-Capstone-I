@@ -3,10 +3,18 @@
     "name": "Attendify",
     "version": "1.0",
     "description": "Facial recognition-based attendance tracking",
-    "permissions": ["storage"],
+    "permissions": [],
     "action": {
       "default_popup": "popup.html",
       "default_icon": {
+        "16": "/icons/attendifyIcon3.png",
+        "48": "/icons/attendifyIcon3.png",
+        "128": "/icons/attendifyIcon3.png"
       }
+    },
+    "icons": {
+        "16": "/icons/attendifyIcon3.png",
+        "48": "/icons/attendifyIcon3.png",
+        "128": "/icons/attendifyIcon3.png"
     }
 }

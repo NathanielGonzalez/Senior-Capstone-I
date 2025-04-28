@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (data.success) {
                     localStorage.setItem('professor_id', data.user.id);
 
-                    alert("Signup successful! Enter your class data.");
+                    alert("Signup successful! Submit your class data.");
                     authPage.style.display = "none";
                     attendancePage.style.display = "none";
                     uploadPage.style.display = "block";
@@ -113,7 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 //-----------------------------------------------------UPLOAD PAGE------------------------------------------------------------------
-    const teacherNameInput = document.getElementById("teacherName");
     const uploadButton = document.getElementById("uploadButton");
     const goToLogin = document.getElementById("goToLogin");
 
@@ -146,13 +145,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Event listener for upload file button
     uploadButton.addEventListener("click", function () {
         const professorId = localStorage.getItem('professor_id');
-
-        const teacherName = teacherNameInput.value.trim();  
-
-        if (!teacherName) {
-            alert("Please enter your name.");
-            return;
-        }
 
         const fileInputs = document.querySelectorAll(".fileInput");
 
@@ -187,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     alert(`Error uploading course. Please try again.`);
                 });  
             } else {
-                alert("Please provide a course name and select a file for each class.");
+                alert("Please select a file for each class.");
                 return;
             }
         }
@@ -203,7 +195,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function clearUploadPage() {
         const fileUploadContainer = document.getElementById("fileUploadContainer");
         fileUploadContainer.innerHTML = '';
-        teacherNameInput.value = ''; 
     }
 
     // Event listener to go back to login page from upload page
@@ -368,19 +359,19 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             // If attendance was successfully started, update UI
             if (data.id && data.isActive === true) {
-                alert("Attendance Started..." + JSON.stringify(data));
+                alert("Attendance Started... ... Please wait for confirmation alert");
 
                 const sessionId = data.id; 
                 setTimeout(() => {
                     getSessionAttendance(sessionId);
                 }, 31000);
             } else {
-                alert("Error starting attendance: " + JSON.stringify(data));
+                alert("Error starting attendance! Please login and try again.");
             }
         })
         .catch(error => {
             console.error("Error:", error);
-            alert("Failed to start attendance.");
+            alert("Failed to start attendance. Please login and try again.");
         });
     });
 
@@ -388,7 +379,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(`https://capstoneserver-ndh5.onrender.com/attendance/${sessionId}`)
             .then(response => response.json())
             .then(data => {
-                alert("Attendance data for session:" + JSON.stringify(data));
+                alert("Attendance complete!");
 
                 // Access the correct array
                 data.attendance.forEach(record => {
@@ -609,6 +600,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (data.success) {
                         alert(`Course uploaded successfully!`);
                         loadCourses(professorId);
+                        //function call to delete added container
                     } else {
                         alert(`Error adding course: ${data.message}`);
                     }
