@@ -21,24 +21,23 @@ interface Props {
 }
 
 const ViewProfileModal: React.FC<Props> = ({ isOpen, onClose }) => {
-    const [userInfo, setUserInfo] = useState<any>(null);    
+    const [userInfo, setUserInfo] = useState<any>({});    
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    useEffect(()=>{
       const checkUser = async () => {
         const tok = localStorage.getItem('auth_token');
-        const user = await axios.post('https://capstoneserver-puce.vercel.app/studentInfo', {
+        const user = await axios.post(`${import.meta.env.VITE_API_URL}/studentInfo`, {
             user:tok
           },
           { headers: { 'Authorization': `Bearer ${tok}` } }
         )
           setUserInfo(user.data.userInfo);
-          setLoading(false)
+          console.log(userInfo)
       };
-      
-  
-      if (isOpen) checkUser();;
-    }, [isOpen]);
+      checkUser();
+      setLoading(false)
+    },[])
 
     return (
       <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
@@ -77,7 +76,7 @@ const ViewProfileModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 </Grid>
                 <Grid item xs={4}>
                   <Typography variant="caption" color="gray">Face Verified</Typography>
-                  <Typography>{userInfo.face_model?.length > 0 ? '✅' : '❌'}</Typography>
+                  <Typography>{userInfo.face_encoding ? '✅' : '❌'}</Typography>
                 </Grid>
               </Grid>
 
