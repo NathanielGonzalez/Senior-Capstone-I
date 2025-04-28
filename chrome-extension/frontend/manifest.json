@@ -7,14 +7,14 @@
     "action": {
       "default_popup": "popup.html",
       "default_icon": {
-        "16": "attendifyIcon3.png",
-        "48": "attendifyIcon3.png",
-        "128": "attendifyIcon3.png"
+        "16": "/icons/attendifyIcon3.png",
+        "48": "/icons/attendifyIcon3.png",
+        "128": "/icons/attendifyIcon3.png"
       }
     },
     "icons": {
-        "16": "attendifyIcon3.png",
-        "48": "attendifyIcon3.png",
-        "128": "attendifyIcon3.png"
+        "16": "/icons/attendifyIcon3.png",
+        "48": "/icons/attendifyIcon3.png",
+        "128": "/icons/attendifyIcon3.png"
     }
 }
