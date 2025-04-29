@@ -14,13 +14,6 @@ const Header: React.FC = () => {
           <img src={Logo} alt="Attendify Logo" className="" />
         </Link>
 
-        {/* Navigation Links */}
-        <nav className="hidden md:flex space-x-6">
-          <Link to="#" className="hover:text-gray-400">About</Link>
-          <Link to="#" className="hover:text-gray-400">Product</Link>
-          <Link to="#" className="hover:text-gray-400">Features</Link>
-        </nav>
-
         {/* Login Button */}
         <Link to="/login" className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-8 py-2 rounded-full">
           Login

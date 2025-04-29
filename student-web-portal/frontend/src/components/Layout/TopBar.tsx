@@ -37,16 +37,9 @@ const TopBar: React.FC<TopBarProps> = ({ onOpenProfile }) => {
       {/* Icons & Profile */}
       <div className="flex items-center gap-x-4 lg:gap-x-6">
         
-        {/* Messages Icon with Badge */}
-        <IconButton color="default">
-          <Badge badgeContent={2} color="error">
-            <Mail />
-          </Badge>
-        </IconButton>
-
         {/* Notifications Icon with Badge */}
         <IconButton color="default">
-          <Badge badgeContent={3} color="error">
+          <Badge badgeContent={0} color="error">
             <Notifications />
           </Badge>
         </IconButton>

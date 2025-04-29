@@ -80,14 +80,14 @@ const handleUpload = async () => {
         
         if (response.status==200) {
             alert("Images uploaded and processed successfully.");
-            navigate("/dashboard"); // Redirect to dashboard after completion
+            navigate("/settings"); // Redirect to dashboard after completion
         } else {
             throw new Error(response.status);
         }
     } catch (error) {
         console.error("Upload Error:", error);
         alert("An error occurred during the upload. Please try again.");
-        navigate("/dashboard");
+        navigate("/settings");
     } finally {
         setUploading(false);
     }
