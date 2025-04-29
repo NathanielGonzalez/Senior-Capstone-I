@@ -1,0 +1,43 @@
+Changes Made to Raspberry Pi Backend (Face Recognition Script)
+
+1. Camera Configuration Improvements
+Resolution Increased: Changed camera preview size to 1280x720 for sharper face detection.
+Format Fix: Explicitly used RGB888 to fix the "purple/pink" display problem caused by format mismatch.
+Frame Warm-up: Discarded first few frames after camera starts to ensure better color balancing before processing.
+
+2. Face Recognition Pipeline Optimizations
+Smarter Frame Resizing: Now resizes captured frames by 50% (instead of 25%) to speed up processing while preserving face detail.
+Direct Use of Captured Frame: Removed unnecessary color conversions between RGB and BGR, since PiCamera2 captures correctly formatted data.
+Improved Detection Threshold: Set stricter face distance matching (< 0.8) to avoid false positives.
+
+3. Stability Enhancements
+Camera Locking: Added a threading.Lock() around camera usage to avoid two attendance sessions using the camera at the same time.
+Safer Shutdown: Always stops camera and closes OpenCV window even if errors occur during attendance.
+
+4. Code Refactoring
+Cleaner Exception Handling: Added more specific try/except blocks.
+Reduced Logging Noise: Prints only when faces are detected or errors occur.
+About the run-attendify.sh Script
+
+Purpose
+The run-attendify.sh script automates setup steps to safely and reliably run the Raspberry Pi "integration-with-backend.py" script.
+
+What it Does
+Activates the Python virtual environment.
+Kills any previously running integration-with-backend.py scripts (to free the camera).
+Stops services like PipeWire and WirePlumber that might "steal" the camera.
+Manually frees /dev/video* devices if necessary.
+Launches the Flask and Socket.IO backend script (integration-with-backend.py) cleanly.
+
+Why This Script Matters
+Prevents the common "Camera Device Busy" or "Broken Pipe" errors.
+Ensures the virtual environment is active for dependencies.
+Saves time compared to doing all steps manually.
+
+Final Notes
+These upgrades make Attendify faster, more stable, and more production-ready.
+This documentation should be committed alongside the updated code for clarity.
+
+Prepared by: Nathaniel (Nat)
+
+Date: April 28, 2025
