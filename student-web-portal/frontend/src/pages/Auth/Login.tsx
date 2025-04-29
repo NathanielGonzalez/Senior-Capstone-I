@@ -20,7 +20,7 @@ const Login: React.FC = () => {
     const checkUser = async () => {
       const session = localStorage.getItem('auth_token');
       if (session) {
-        navigate("/dashboard", { replace: true });
+        navigate("/settings", { replace: true });
       }
     }; 
     checkUser();
@@ -39,7 +39,7 @@ const Login: React.FC = () => {
 
       if (response.data.success) {
         localStorage.setItem('auth_token', response.data.token);
-        navigate('/dashboard', { replace: true });
+        navigate('/settings', { replace: true });
       } else {
         setError(response.data.message || 'Login failed. Please check your credentials.');
       }
@@ -53,30 +53,11 @@ const Login: React.FC = () => {
   return (
     <div>
       <Header />
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 space-y-4">
+      <div className="h-screen flex flex-col items-center justify-start bg-gray-50 py-32 px-4 sm:px-6 lg:px-8 space-y-4 overflow-hidden">
         <div className='max-w-md w-full space-y-6'>
           <h2 className='text-center text-4xl font-bold'>Sign In.</h2>
         </div>
         
-        <div className="space-y-4">
-          <button 
-            type='button'
-            className="w-full flex items-center justify-center py-2 px-32 border border-gray-800 rounded-2xl shadow-sm text-sm font-medium text-gray-800 bg-white hover:bg-gray-50 gap-x-4"
-          >
-            <img src={GoogleIcon} alt="Google" className="h-8 w-8" />
-            Continue with Google
-          </button>
-          <button
-            type="button"
-            className="w-full flex items-center justify-center py-2 px-32 border border-gray-800 rounded-2xl shadow-sm text-sm font-medium text-gray-800 bg-white hover:bg-gray-50 gap-x-4"
-          >
-            <img src={WorkdayIcon} alt="Workday Icon" className="h-8 w-8 mr-2" />
-            Continue with Workday
-          </button>
-        </div>
-
-        <div className="text-center text-black font-bold">or</div>
-
         <div className='w-1/2'>
           <form className="space-y-4" onSubmit={handleSubmit}>
             {error && <p className='text-red-500 text-sm'>{error}</p>}

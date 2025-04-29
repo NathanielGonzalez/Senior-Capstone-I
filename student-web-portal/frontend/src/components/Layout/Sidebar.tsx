@@ -38,32 +38,6 @@ const Sidebar: React.FC = () => {
         
         {/* Navigation Menu */}
         <nav className="flex flex-1 flex-col px-4 pt-4">
-        <p className="text-xs font-semibold text-gray-500 uppercase">Menu</p>
-        <ul className="mt-2 space-y-1">
-          {navigation.map((item) => (
-            <li key={item.name}>
-              <NavLink
-                to={item.href}
-                className={({ isActive }) =>
-                  clsx(
-                    isActive
-                      ? 'bg-indigo-600 text-white'
-                      : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                    'group flex items-center gap-x-3 rounded-lg p-2 text-sm font-medium transition-all'
-                  )
-                }
-              >
-                {/* If string (image path), use <img> */}
-                {typeof item.icon === 'string' ? (
-                  <img src={item.icon} alt={item.name} className="h-5 w-5" />
-                ) : (
-                  <item.icon className="h-5 w-5 shrink-0" />
-                )}
-                {item.name}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
 
         <hr className='mt-4 border-1'/>
 
